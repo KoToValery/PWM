@@ -1,10 +1,14 @@
 ARG BUILD_FROM
 FROM ${BUILD_FROM}
 
-# Копиране на файловете
-COPY pwm_HAOS.py /pwm_HAOS.py
-COPY run.sh /run.sh
+# Копиране на Python скрипта
+COPY pwm_HAOS.py /app/pwm_HAOS.py
 
-RUN chmod a+x /run.sh
+# Копиране на s6 services
+COPY rootfs /
 
-CMD ["/run.sh"]
+# Права за изпълнение
+RUN chmod a+x /etc/services.d/pwm/run && \
+    chmod a+x /etc/services.d/pwm/finish
+
+WORKDIR /app
