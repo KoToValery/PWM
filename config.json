@@ -23,6 +23,5 @@
     "auto_start": "bool",
     "daemon_host": "str",
     "daemon_port": "int"
-  },
-  "image": "ghcr.io/kotovalery/pwm-led-controller"
+  }
 }

@@ -9,7 +9,7 @@
 
 ---
 
-## Метод 1: Бърза инсталация (Препоръчително) 🚀
+## 🚀 Бърза инсталация
 
 ### Стъпка 1: Конфигурация на config.txt
 
@@ -44,7 +44,7 @@ curl -sSL https://raw.githubusercontent.com/KoToValery/PWM/main/quick-install.sh
 - Създаде systemd service
 - Стартира daemon автоматично
 
-### Стъпка 3: Проверка
+### Стъпка 3: Проверка на Daemon
 
 ```bash
 # Проверете статус
@@ -59,27 +59,41 @@ curl http://localhost:9000/status
 {"status": "ok", "pwm": {}}
 ```
 
-### Стъпка 4: Инсталация на HAOS Addon
+### Стъпка 4: Инсталация на HAOS Addon от GitHub
 
-**Опция A: От GitHub (Препоръчително)**
+**Метод 1: Добавяне на Repository (Препоръчително)**
 
-1. Home Assistant → Settings → Add-ons → Add-on Store
-2. Кликнете "⋮" (горе дясно) → "Repositories"
-3. Добавете: `https://github.com/KoToValery/PWM`
-4. Намерете "PWM LED Controller" → Install
+1. Отворете Home Assistant
+2. Settings → Add-ons → Add-on Store
+3. Кликнете на трите точки "⋮" (горе дясно)
+4. Изберете "Repositories"
+5. Добавете URL: `https://github.com/KoToValery/PWM`
+6. Кликнете "Add"
+7. Затворете прозореца
+8. Refresh страницата или "Check for updates"
+9. Намерете "PWM LED Controller" в списъка
+10. Кликнете → Install
+11. Изчакайте build-а (2-3 минути)
 
-**Опция B: Ръчно**
+**Метод 2: Локална инсталация (за Supervised)**
 
-1. Клонирайте repo:
-   ```bash
-   cd /addons/
-   git clone https://github.com/KoToValery/PWM.git pwm_led
-   ```
+Ако горният метод не работи:
 
-2. Home Assistant → Settings → Add-ons → "Check for updates"
-3. Намерете "PWM LED Controller" → Install
+```bash
+# Клонирайте repo в local addons папката
+cd /usr/share/hassio/addons/local/
+sudo git clone https://github.com/KoToValery/PWM.git pwm_led
+```
+
+След това в Home Assistant:
+1. Settings → Add-ons
+2. Кликнете "⋮" → "Check for updates"
+3. Намерете "PWM LED Controller" в "Local add-ons"
+4. Install
 
 ### Стъпка 5: Конфигурация на Addon
+
+След инсталация, отворете addon-а и конфигурирайте:
 
 ```yaml
 gpio_pin: 12
@@ -92,79 +106,53 @@ daemon_port: 9000
 
 ### Стъпка 6: Стартиране
 
-1. Save → Start
-2. Проверете логовете
+1. Save
+2. Start
+3. Проверете логовете - трябва да видите:
+   ```
+   ✓ Connected to pwm-daemon at http://127.0.0.1:9000
+   ✓ PWM initialized: GPIO12, 26000Hz
+   ✓ Duty cycle set to 60%
+   ✓ PWM enabled
+   ✓ PWM started automatically
+   ```
 
 ---
 
-## Метод 2: Ръчна инсталация
-
-### Стъпка 1: Конфигурация на config.txt
-
-```bash
-sudo nano /boot/firmware/config.txt
-```
-
-Добавете:
-
-```bash
-dtoverlay=pwm,pin=12,func=4
-```
-
-Рестартирайте:
-
-```bash
-sudo reboot
-```
-
-### Стъпка 2: Клониране на repo
-
-```bash
-cd ~
-git clone https://github.com/KoToValery/PWM.git
-cd PWM/host-daemon/
-```
-
-### Стъпка 3: Инсталация на daemon
-
-```bash
-chmod +x install.sh
-sudo ./install.sh
-```
-
-### Стъпка 4: Проверка
-
-```bash
-sudo systemctl status pwm-daemon
-curl http://localhost:9000/status
-```
-
-### Стъпка 5: Инсталация на HAOS Addon
-
-```bash
-# Копирайте addon файловете
-cd ..
-cp -r . /addons/pwm_led/
-```
-
-Home Assistant → Settings → Add-ons → "Check for updates" → Install
-
----
-
-## Готово! 🎉
+## 🎉 Готово!
 
 PWM контролерът работи!
 
-## Тестване
+---
+
+## 🧪 Тестване
+
+Можете да тествате daemon директно:
 
 ```bash
-# Изтеглете тестовия скрипт
 curl -sSL https://raw.githubusercontent.com/KoToValery/PWM/main/host-daemon/test_api.sh -o test_api.sh
 chmod +x test_api.sh
 ./test_api.sh
 ```
 
-## Отстраняване на проблеми
+---
+
+## 🐛 Отстраняване на проблеми
+
+### Addon не се появява в списъка
+
+**Решение:**
+1. Проверете дали repository URL е правилен
+2. Refresh страницата на Add-on Store
+3. Проверете Settings → System → Logs за грешки
+
+### Build грешка при инсталация
+
+**Ако видите грешка при build:**
+
+1. Проверете логовете: Settings → System → Logs
+2. Опитайте локална инсталация (Метод 2)
+3. Уверете се, че имате интернет връзка
 
 ### Daemon не се стартира
 
@@ -211,7 +199,18 @@ sudo systemctl daemon-reload
 curl -sSL https://raw.githubusercontent.com/KoToValery/PWM/main/quick-install.sh | sudo bash
 ```
 
-## Полезни команди
+---
+
+## 📚 Допълнителна документация
+
+- [Пълна документация](README.md)
+- [Daemon документация](host-daemon/README.md)
+- [Troubleshooting Guide](TROUBLESHOOTING.md)
+- [Changelog](CHANGELOG.md)
+
+---
+
+## 🔧 Полезни команди
 
 ```bash
 # Daemon управление
@@ -241,7 +240,9 @@ curl -X POST http://localhost:9000/enable \
 curl http://localhost:9000/status/12
 ```
 
-## Деинсталация
+---
+
+## 🗑️ Деинсталация
 
 ### Daemon
 
@@ -257,7 +258,10 @@ sudo systemctl daemon-reload
 
 Home Assistant → Settings → Add-ons → PWM LED Controller → Uninstall
 
-## Поддръжка
+---
+
+## 📞 Поддръжка
 
 - GitHub: https://github.com/KoToValery/PWM
 - Issues: https://github.com/KoToValery/PWM/issues
+- Discussions: https://github.com/KoToValery/PWM/discussions

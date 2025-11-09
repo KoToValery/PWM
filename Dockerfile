@@ -1,6 +1,10 @@
-FROM python:3.11-slim
+ARG BUILD_FROM
+FROM ${BUILD_FROM}
 
-# Копиране на скриптовете
+# Инсталиране на Python ако не е налично
+RUN apk add --no-cache python3 py3-pip || true
+
+# Копиране на файловете
 COPY pwm_HAOS.py /pwm_HAOS.py
 COPY run.sh /run.sh
 
