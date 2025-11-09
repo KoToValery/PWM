@@ -1,5 +1,5 @@
 name: "PWM LED Controller"
-version: "3.0.1"
+version: "3.0.2"
 slug: "pwm_led"
 description: "Управление на LED чрез PWM на GPIO (HTTP API към pwm-daemon)"
 arch:
