@@ -1,10 +1,10 @@
 #!/bin/bash
 # Бърза инсталация на PWM Daemon от GitHub
-# Usage: curl -sSL https://raw.githubusercontent.com/KoToValery/ADC_LIN_CAN/main/PWM/quick-install.sh | sudo bash
+# Usage: curl -sSL https://raw.githubusercontent.com/KoToValery/PWM/main/quick-install.sh | sudo bash
 
 set -e
 
-GITHUB_REPO="https://raw.githubusercontent.com/KoToValery/ADC_LIN_CAN/main/PWM"
+GITHUB_REPO="https://raw.githubusercontent.com/KoToValery/PWM/main"
 TEMP_DIR="/tmp/pwm-daemon-install"
 
 echo "=========================================="
@@ -15,7 +15,7 @@ echo ""
 # Провери за root права
 if [ "$EUID" -ne 0 ]; then 
     echo "❌ Моля стартирай с sudo"
-    echo "Usage: curl -sSL https://raw.githubusercontent.com/KoToValery/ADC_LIN_CAN/main/PWM/quick-install.sh | sudo bash"
+    echo "Usage: curl -sSL https://raw.githubusercontent.com/KoToValery/PWM/main/quick-install.sh | sudo bash"
     exit 1
 fi
 

@@ -35,7 +35,7 @@ sudo reboot
 След рестарт, изпълнете:
 
 ```bash
-curl -sSL https://raw.githubusercontent.com/KoToValery/ADC_LIN_CAN/main/PWM/quick-install.sh | sudo bash
+curl -sSL https://raw.githubusercontent.com/KoToValery/PWM/main/quick-install.sh | sudo bash
 ```
 
 Това ще:
@@ -65,7 +65,7 @@ curl http://localhost:9000/status
 
 1. Home Assistant → Settings → Add-ons → Add-on Store
 2. Кликнете "⋮" (горе дясно) → "Repositories"
-3. Добавете: `https://github.com/KoToValery/ADC_LIN_CAN`
+3. Добавете: `https://github.com/KoToValery/PWM`
 4. Намерете "PWM LED Controller" → Install
 
 **Опция B: Ръчно**
@@ -73,8 +73,7 @@ curl http://localhost:9000/status
 1. Клонирайте repo:
    ```bash
    cd /addons/
-   git clone https://github.com/KoToValery/ADC_LIN_CAN.git
-   mv ADC_LIN_CAN/PWM ./pwm_led
+   git clone https://github.com/KoToValery/PWM.git pwm_led
    ```
 
 2. Home Assistant → Settings → Add-ons → "Check for updates"
@@ -122,8 +121,8 @@ sudo reboot
 
 ```bash
 cd ~
-git clone https://github.com/KoToValery/ADC_LIN_CAN.git
-cd ADC_LIN_CAN/PWM/host-daemon/
+git clone https://github.com/KoToValery/PWM.git
+cd PWM/host-daemon/
 ```
 
 ### Стъпка 3: Инсталация на daemon
@@ -160,7 +159,7 @@ PWM контролерът работи!
 
 ```bash
 # Изтеглете тестовия скрипт
-curl -sSL https://raw.githubusercontent.com/KoToValery/ADC_LIN_CAN/main/PWM/host-daemon/test_api.sh -o test_api.sh
+curl -sSL https://raw.githubusercontent.com/KoToValery/PWM/main/host-daemon/test_api.sh -o test_api.sh
 chmod +x test_api.sh
 ./test_api.sh
 ```
@@ -209,7 +208,7 @@ sudo rm /usr/local/bin/pwm_daemon.py
 sudo systemctl daemon-reload
 
 # Инсталирай отново
-curl -sSL https://raw.githubusercontent.com/KoToValery/ADC_LIN_CAN/main/PWM/quick-install.sh | sudo bash
+curl -sSL https://raw.githubusercontent.com/KoToValery/PWM/main/quick-install.sh | sudo bash
 ```
 
 ## Полезни команди
@@ -260,5 +259,5 @@ Home Assistant → Settings → Add-ons → PWM LED Controller → Uninstall
 
 ## Поддръжка
 
-- GitHub: https://github.com/KoToValery/ADC_LIN_CAN/tree/main/PWM
-- Issues: https://github.com/KoToValery/ADC_LIN_CAN/issues
+- GitHub: https://github.com/KoToValery/PWM
+- Issues: https://github.com/KoToValery/PWM/issues

@@ -3,7 +3,7 @@
   "version": "3.0.0",
   "slug": "pwm_led",
   "description": "Управление на LED чрез Hardware PWM на GPIO за Raspberry Pi 5 (26 kHz)",
-  "url": "https://github.com/KoToValery/ADC_LIN_CAN/tree/main/PWM",
+  "url": "https://github.com/KoToValery/PWM",
   "arch": ["aarch64"],
   "startup": "application",
   "boot": "auto",

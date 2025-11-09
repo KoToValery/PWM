@@ -1,8 +1,5 @@
 # PWM LED Controller для Home Assistant OS
 
-[![GitHub Release][releases-shield]][releases]
-[![License][license-shield]](LICENSE)
-
 Addon за управление на LED светлини или вентилатори чрез **Hardware PWM** на GPIO пинове за Raspberry Pi 5.
 
 **Поддържа високи честоти до 100 kHz** - идеално за 4-pin PWM вентилатори (25-26 kHz).
@@ -59,14 +56,14 @@ sudo reboot
 **Една команда:**
 
 ```bash
-curl -sSL https://raw.githubusercontent.com/KoToValery/ADC_LIN_CAN/main/PWM/quick-install.sh | sudo bash
+curl -sSL https://raw.githubusercontent.com/KoToValery/PWM/main/quick-install.sh | sudo bash
 ```
 
 ### Стъпка 3: Инсталация на HAOS Addon
 
 1. Home Assistant → Settings → Add-ons → Add-on Store
 2. Кликнете "⋮" → "Repositories"
-3. Добавете: `https://github.com/KoToValery/ADC_LIN_CAN`
+3. Добавете: `https://github.com/KoToValery/PWM`
 4. Намерете "PWM LED Controller" → Install
 5. Configure → Start
 
@@ -148,7 +145,7 @@ sudo systemctl restart pwm-daemon
 ### Тестване на API
 
 ```bash
-curl -sSL https://raw.githubusercontent.com/KoToValery/ADC_LIN_CAN/main/PWM/host-daemon/test_api.sh -o test_api.sh
+curl -sSL https://raw.githubusercontent.com/KoToValery/PWM/main/host-daemon/test_api.sh -o test_api.sh
 chmod +x test_api.sh
 ./test_api.sh
 ```
@@ -169,7 +166,3 @@ MIT License - вижте [LICENSE](LICENSE) за детайли
 ---
 
 **Забележка:** Този addon изисква Raspberry Pi 5 с Home Assistant OS Supervised на Debian.
-
-[releases-shield]: https://img.shields.io/github/release/KoToValery/ADC_LIN_CAN.svg
-[releases]: https://github.com/KoToValery/ADC_LIN_CAN/releases
-[license-shield]: https://img.shields.io/github/license/KoToValery/ADC_LIN_CAN.svg
