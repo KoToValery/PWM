@@ -1,5 +1,5 @@
 build_from:
-  aarch64: "ghcr.io/home-assistant/aarch64-base-python:3.11-alpine3.18"
+  aarch64: "python:3.11-alpine"
 
 labels:
   org.opencontainers.image.title: "PWM LED Controller"
