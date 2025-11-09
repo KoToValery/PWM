@@ -1,0 +1,264 @@
+# Пълна инсталация - PWM LED Controller v3.0
+
+## Преглед
+
+Този addon използва daemon архитектура за управление на Hardware PWM:
+
+1. **PWM Daemon** - Работи на хост системата с root права
+2. **HAOS Addon** - Комуникира с daemon чрез HTTP API
+
+---
+
+## Метод 1: Бърза инсталация (Препоръчително) 🚀
+
+### Стъпка 1: Конфигурация на config.txt
+
+```bash
+sudo nano /boot/firmware/config.txt
+```
+
+Добавете в края:
+
+```bash
+# Hardware PWM на GPIO12
+dtoverlay=pwm,pin=12,func=4
+```
+
+Запазете (Ctrl+O, Enter, Ctrl+X) и рестартирайте:
+
+```bash
+sudo reboot
+```
+
+### Стъпка 2: Инсталация на PWM Daemon (една команда!)
+
+След рестарт, изпълнете:
+
+```bash
+curl -sSL https://raw.githubusercontent.com/KoToValery/ADC_LIN_CAN/main/PWM/quick-install.sh | sudo bash
+```
+
+Това ще:
+- Изтегли необходимите файлове от GitHub
+- Инсталира daemon в `/usr/local/bin/`
+- Създаде systemd service
+- Стартира daemon автоматично
+
+### Стъпка 3: Проверка
+
+```bash
+# Проверете статус
+sudo systemctl status pwm-daemon
+
+# Тест на API
+curl http://localhost:9000/status
+```
+
+Очакван отговор:
+```json
+{"status": "ok", "pwm": {}}
+```
+
+### Стъпка 4: Инсталация на HAOS Addon
+
+**Опция A: От GitHub (Препоръчително)**
+
+1. Home Assistant → Settings → Add-ons → Add-on Store
+2. Кликнете "⋮" (горе дясно) → "Repositories"
+3. Добавете: `https://github.com/KoToValery/ADC_LIN_CAN`
+4. Намерете "PWM LED Controller" → Install
+
+**Опция B: Ръчно**
+
+1. Клонирайте repo:
+   ```bash
+   cd /addons/
+   git clone https://github.com/KoToValery/ADC_LIN_CAN.git
+   mv ADC_LIN_CAN/PWM ./pwm_led
+   ```
+
+2. Home Assistant → Settings → Add-ons → "Check for updates"
+3. Намерете "PWM LED Controller" → Install
+
+### Стъпка 5: Конфигурация на Addon
+
+```yaml
+gpio_pin: 12
+duty_cycle: 60
+frequency: 26000
+auto_start: true
+daemon_host: "127.0.0.1"
+daemon_port: 9000
+```
+
+### Стъпка 6: Стартиране
+
+1. Save → Start
+2. Проверете логовете
+
+---
+
+## Метод 2: Ръчна инсталация
+
+### Стъпка 1: Конфигурация на config.txt
+
+```bash
+sudo nano /boot/firmware/config.txt
+```
+
+Добавете:
+
+```bash
+dtoverlay=pwm,pin=12,func=4
+```
+
+Рестартирайте:
+
+```bash
+sudo reboot
+```
+
+### Стъпка 2: Клониране на repo
+
+```bash
+cd ~
+git clone https://github.com/KoToValery/ADC_LIN_CAN.git
+cd ADC_LIN_CAN/PWM/host-daemon/
+```
+
+### Стъпка 3: Инсталация на daemon
+
+```bash
+chmod +x install.sh
+sudo ./install.sh
+```
+
+### Стъпка 4: Проверка
+
+```bash
+sudo systemctl status pwm-daemon
+curl http://localhost:9000/status
+```
+
+### Стъпка 5: Инсталация на HAOS Addon
+
+```bash
+# Копирайте addon файловете
+cd ..
+cp -r . /addons/pwm_led/
+```
+
+Home Assistant → Settings → Add-ons → "Check for updates" → Install
+
+---
+
+## Готово! 🎉
+
+PWM контролерът работи!
+
+## Тестване
+
+```bash
+# Изтеглете тестовия скрипт
+curl -sSL https://raw.githubusercontent.com/KoToValery/ADC_LIN_CAN/main/PWM/host-daemon/test_api.sh -o test_api.sh
+chmod +x test_api.sh
+./test_api.sh
+```
+
+## Отстраняване на проблеми
+
+### Daemon не се стартира
+
+```bash
+sudo journalctl -u pwm-daemon -n 50
+```
+
+Проверете дали config.txt е правилно конфигуриран и системата е рестартирана.
+
+### Addon не може да се свърже
+
+```bash
+# Проверете daemon
+sudo systemctl status pwm-daemon
+
+# Проверете порта
+netstat -tuln | grep 9000
+
+# Рестартирайте daemon
+sudo systemctl restart pwm-daemon
+```
+
+### PWM не работи
+
+1. Проверете физическата връзка
+2. Проверете дали GPIO 12 е правилно свързан
+3. Тествайте с мултиметър или осцилоскоп
+4. Проверете логовете:
+   ```bash
+   sudo journalctl -u pwm-daemon -f
+   ```
+
+### Преинсталация на daemon
+
+```bash
+# Деинсталирай
+sudo systemctl stop pwm-daemon
+sudo systemctl disable pwm-daemon
+sudo rm /etc/systemd/system/pwm-daemon.service
+sudo rm /usr/local/bin/pwm_daemon.py
+sudo systemctl daemon-reload
+
+# Инсталирай отново
+curl -sSL https://raw.githubusercontent.com/KoToValery/ADC_LIN_CAN/main/PWM/quick-install.sh | sudo bash
+```
+
+## Полезни команди
+
+```bash
+# Daemon управление
+sudo systemctl status pwm-daemon      # Статус
+sudo systemctl restart pwm-daemon     # Рестарт
+sudo journalctl -u pwm-daemon -f      # Логове
+
+# API тестове
+curl http://localhost:9000/status     # Общ статус
+
+# Инициализация на PWM
+curl -X POST http://localhost:9000/init \
+  -H "Content-Type: application/json" \
+  -d '{"gpio_pin": 12, "frequency": 26000}'
+
+# Настройка на duty cycle
+curl -X POST http://localhost:9000/duty \
+  -H "Content-Type: application/json" \
+  -d '{"gpio_pin": 12, "duty_cycle": 75}'
+
+# Включване
+curl -X POST http://localhost:9000/enable \
+  -H "Content-Type: application/json" \
+  -d '{"gpio_pin": 12}'
+
+# Статус на GPIO 12
+curl http://localhost:9000/status/12
+```
+
+## Деинсталация
+
+### Daemon
+
+```bash
+sudo systemctl stop pwm-daemon
+sudo systemctl disable pwm-daemon
+sudo rm /etc/systemd/system/pwm-daemon.service
+sudo rm /usr/local/bin/pwm_daemon.py
+sudo systemctl daemon-reload
+```
+
+### Addon
+
+Home Assistant → Settings → Add-ons → PWM LED Controller → Uninstall
+
+## Поддръжка
+
+- GitHub: https://github.com/KoToValery/ADC_LIN_CAN/tree/main/PWM
+- Issues: https://github.com/KoToValery/ADC_LIN_CAN/issues
